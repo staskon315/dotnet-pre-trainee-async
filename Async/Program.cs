@@ -27,6 +27,9 @@ var tasks = new List<Task<string>>
     ProcessDataAsync("File 3", 500)
 };
 
+await Task.WhenAll(tasks);
+foreach(var res in tasks)
+    Console.WriteLine(res.Result);
 
 
 asyncWatch.Stop();
