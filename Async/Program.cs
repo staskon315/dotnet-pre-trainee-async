@@ -80,6 +80,8 @@ asyncWatch.Stop();
 Console.WriteLine(
     $"Asynchronous time: {asyncWatch.Elapsed.TotalSeconds:F2} seconds \n");
 
+Console.WriteLine($"Results:\n  Synchronous processing: {syncWatch.Elapsed.TotalSeconds:F2} seconds\nAsynchronous processing: {asyncWatch.Elapsed.TotalSeconds:F2} seconds");
+
 
 
 static string ProcessData(string dataName)
