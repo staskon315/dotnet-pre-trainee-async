@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Runtime.Serialization.Formatters;
 
 Console.WriteLine("=== Synchronous Processing ===");
 
@@ -27,9 +26,20 @@ var tasks = new List<Task<string>>
     ProcessDataAsync("File 3", 2000)
 };
 
-await Task.WhenAll(tasks);
-foreach(var res in tasks)
-    Console.WriteLine(res.Result);
+try
+{
+    await Task.WhenAll(tasks);
+}
+catch
+{
+    Console.WriteLine("Processing File 2 failed: Unable to process data.");
+}
+foreach (var task in tasks)
+{
+    if (task.IsCompletedSuccessfully)
+        Console.WriteLine(task.Result);
+
+}
 
 
 asyncWatch.Stop();
@@ -41,7 +51,7 @@ Console.WriteLine();
 
 
 Console.WriteLine("=== Asynchronous Processing 2(WhenAny) ===");
- asyncWatch = Stopwatch.StartNew();
+asyncWatch = Stopwatch.StartNew();
 
 var tasks2 = new List<Task<string>>
 {
@@ -52,8 +62,13 @@ var tasks2 = new List<Task<string>>
 
 while (tasks2.Count > 0)
 {
-    var completedTask =await Task.WhenAny(tasks2);
-    string completed = await completedTask;
+    var completedTask = await Task.WhenAny(tasks2);
+    string completed;
+    try { completed = await completedTask; }
+    catch
+    {
+        completed = "Processing File 2 failed: Unable to process data.";
+    }
 
     Console.WriteLine(completed);
     tasks2.Remove(completedTask);
@@ -63,7 +78,7 @@ while (tasks2.Count > 0)
 asyncWatch.Stop();
 
 Console.WriteLine(
-    $"Asynchronous time: {asyncWatch.Elapsed.TotalSeconds:F2} seconds");
+    $"Asynchronous time: {asyncWatch.Elapsed.TotalSeconds:F2} seconds \n");
 
 
 
@@ -83,7 +98,10 @@ static async Task<string> ProcessDataAsync(
 {
     var asyncWatchFile = Stopwatch.StartNew();
     Console.WriteLine($"Start of '{dataName}' processing");
-     await Task.Delay(delayMilliseconds);
+
+    if (dataName != "File 2")
+        await Task.Delay(delayMilliseconds);
+    else throw new IOException();
     asyncWatchFile.Stop();
     return $"ProProcessing '{dataName}' completed in {asyncWatchFile.Elapsed.TotalSeconds:F2} seconds.";
 }
