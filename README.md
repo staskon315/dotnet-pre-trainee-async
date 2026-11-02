@@ -22,7 +22,7 @@ In synchronous mode, files are processed sequentially (3 + 3 + 3 ≈ 9 seconds).
 **1. Why did the synchronous version take longer?**
 The operations were performed sequentially: each subsequent operation began only after the previous one had finished. 3 × 3 seconds = 9 seconds.
 
-**2. **Why can asynchronous wait periods overlap?**
+**2. Why can asynchronous wait periods overlap?**
 `await Task.Delay` does not block the thread; instead, it releases it. All tasks start nearly simultaneously, their wait periods occur in parallel, and the total time taken is equal to the duration of the longest operation.
 
 **3. Does `async` automatically create a new thread?**
