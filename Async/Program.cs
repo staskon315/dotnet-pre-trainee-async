@@ -22,9 +22,9 @@ var asyncWatch = Stopwatch.StartNew();
 
 var tasks = new List<Task<string>>
 {
-    ProcessDataAsync("File 1", 500),
-    ProcessDataAsync("File 2", 500),
-    ProcessDataAsync("File 3", 500)
+    ProcessDataAsync("File 1", 3000),
+    ProcessDataAsync("File 2", 1000),
+    ProcessDataAsync("File 3", 2000)
 };
 
 await Task.WhenAll(tasks);
@@ -36,6 +36,35 @@ asyncWatch.Stop();
 
 Console.WriteLine(
     $"Asynchronous time: {asyncWatch.Elapsed.TotalSeconds:F2} seconds");
+
+Console.WriteLine();
+
+
+Console.WriteLine("=== Asynchronous Processing 2(WhenAny) ===");
+ asyncWatch = Stopwatch.StartNew();
+
+var tasks2 = new List<Task<string>>
+{
+    ProcessDataAsync("File 1", 3000),
+    ProcessDataAsync("File 2", 1000),
+    ProcessDataAsync("File 3", 2000)
+};
+
+while (tasks2.Count > 0)
+{
+    var completedTask =await Task.WhenAny(tasks2);
+    string completed = await completedTask;
+
+    Console.WriteLine(completed);
+    tasks2.Remove(completedTask);
+
+}
+
+asyncWatch.Stop();
+
+Console.WriteLine(
+    $"Asynchronous time: {asyncWatch.Elapsed.TotalSeconds:F2} seconds");
+
 
 
 static string ProcessData(string dataName)
