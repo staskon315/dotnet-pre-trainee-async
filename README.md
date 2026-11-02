@@ -39,3 +39,31 @@ The thread pool is limited. Blocking a thread using `Thread.Sleep` or synchronou
 
 **7. Does using asynchronous code always make it faster?**
 No. Asynchrony does not speed up the operation itself; rather, it prevents the thread from being blocked while waiting. For sequential, dependent operations, there is no time gain—in fact, there is a slight overhead. Any reduction in total execution time occurs only because independent wait periods are allowed to overlap.
+
+---
+
+## How to Copy and Run
+
+
+
+### 1. Clone the repository
+
+```bash
+https://github.com/staskon315/dotnet-pre-trainee-async.git
+
+```
+
+
+
+### 2. Navigate to the project folder
+
+```bash
+cd dotnet-pre-trainee-async
+```
+
+
+### 3. Run the application
+
+```bash
+dotnet run
+```
