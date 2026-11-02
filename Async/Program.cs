@@ -101,9 +101,8 @@ static async Task<string> ProcessDataAsync(
     var asyncWatchFile = Stopwatch.StartNew();
     Console.WriteLine($"Start of '{dataName}' processing");
 
-    if (dataName != "File 2")
-        await Task.Delay(delayMilliseconds);
-    else throw new IOException();
+    await Task.Delay(delayMilliseconds);
+    if (dataName == "File 2") throw new IOException();
     asyncWatchFile.Stop();
     return $"ProProcessing '{dataName}' completed in {asyncWatchFile.Elapsed.TotalSeconds:F2} seconds.";
 }
